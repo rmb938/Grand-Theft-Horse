@@ -6,7 +6,7 @@ Grand Theft Horse is a Grand Theft Auto adaptation in Minecraft.
 The ideas for this project came from Grand Theft Auto and All Points Bulletin.
 
 Planned Features
----------
+----------------
 
 * Fully Customizable Weapons
 * Fully Customizable Cars (Horses)
