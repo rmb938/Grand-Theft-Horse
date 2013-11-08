@@ -32,12 +32,21 @@ public class Mission extends BukkitRunnable {
     private Scoreboard scoreboard;
     private ArrayList<Objective> objectives = new ArrayList<>();
 
+    /**
+     * Creates a new Mission
+     * @param plugin GTH Plugin
+     */
     public Mission(GrandTheftHorse plugin) {
         this.plugin = plugin;
-        enforcers = new MTeam(Faction.Enforcers);
-        criminals = new MTeam(Faction.Criminals);
+        enforcers = new MTeam(Faction.Enforcers, this);
+        criminals = new MTeam(Faction.Criminals, this);
     }
 
+    /**
+     * Gets the opposing team
+     * @param team Input Team
+     * @return Opposing Team
+     */
     public MTeam getOtherTeam(MTeam team) {
         if (team == enforcers) {
             return criminals;
@@ -46,6 +55,9 @@ public class Mission extends BukkitRunnable {
         }
     }
 
+    /**
+     * Generates the Scoreboard for the current players in the mission
+     */
     private void generateScoreboard() {
         scoreboard = plugin.getServer().getScoreboardManager().getNewScoreboard();
 
@@ -73,6 +85,9 @@ public class Mission extends BukkitRunnable {
         }
     }
 
+    /**
+     * Updates the scoreboard for the current players in the mission
+     */
     private void updateScoreboard() {
         org.bukkit.scoreboard.Objective sbObjective = scoreboard.getObjective("mission");
         long miliTime = missionTime - System.currentTimeMillis();
@@ -98,14 +113,22 @@ public class Mission extends BukkitRunnable {
         }
     }
 
-    public void openObjectiveCompus(User user) {
+    /**
+     * Opens the compass objective gui to the user.
+     * @param user User to show the compass gui to
+     */
+    public void openObjectiveCompass(User user) {
         Player player = plugin.getServer().getPlayer(user.getUserName());
         if (objectives.size() == 1) {
             player.sendMessage(ChatColor.RED+"There is only one objective in this mission.");
         }
-        //open inventory gui to allow player to choose which objective they want their compus to point to
+        //open inventory gui to allow player to choose which objective they want their compass to point to
     }
 
+    /**
+     * Stops the mission tick, announces the winning team and applies rewards to the players
+     * @param winningTeam The Winning Team
+     */
     public void missionOver(MTeam winningTeam) {
         final Mission toRemove = this;
 
@@ -119,15 +142,17 @@ public class Mission extends BukkitRunnable {
         for (User user : enforcers.getUsers()) {
             Player p = Bukkit.getPlayer(user.getUserName());
             if (p != null) {
-                p.sendMessage(ChatColor.GOLD + "The " + winningTeam.getFacion().name() + " have won!");
+                p.sendMessage(ChatColor.GOLD + "The " + winningTeam.getFaction().name() + " have won!");
             }
         }
         for (User user : criminals.getUsers()) {
             Player p = Bukkit.getPlayer(user.getUserName());
             if (p != null) {
-                p.sendMessage(ChatColor.GOLD + "The " + winningTeam.getFacion().name() + " have won!");
+                p.sendMessage(ChatColor.GOLD + "The " + winningTeam.getFaction().name() + " have won!");
             }
         }
+
+        //TODO: give user rewards for kills and for winning mission
 
         plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
             @Override
@@ -137,30 +162,36 @@ public class Mission extends BukkitRunnable {
         }, 200L);
     }
 
+    /**
+     * Start the Mission
+     */
     public void startMission() {
-        missionTime = System.currentTimeMillis() + 900000;//15 minutes
+        missionTime = System.currentTimeMillis() + 900000;//15 minutes TODO: generate time based off objectives
         generateScoreboard();
 
         for (User user : enforcers.getUsers()) {
-            user.setObjectiveCompus(objectives.get(0));
+            user.setObjectiveCompass(objectives.get(0));
             Player p = plugin.getServer().getPlayer(user.getUserName());
             if (p != null) {
                 p.sendMessage(objectives.get(0).startObjectiveMessage());
             }
         }
         for (User user : criminals.getUsers()) {
-            user.setObjectiveCompus(objectives.get(0));
+            user.setObjectiveCompass(objectives.get(0));
             Player p = plugin.getServer().getPlayer(user.getUserName());
             if (p != null) {
                 p.sendMessage(objectives.get(0).startObjectiveMessage());
             }
         }
 
-        //check if players are close to the mission objectives. if not teleport them closer
+        //TODO: check if players are close to the mission objectives. if not teleport them closer
 
         this.runTaskTimerAsynchronously(plugin, 20L, 20L);
     }
 
+    /**
+     * The Mission Tick once every second
+     */
     @Override
     public void run() {
         for (Objective objective : objectives) {
@@ -171,10 +202,10 @@ public class Mission extends BukkitRunnable {
         }
         updateScoreboard();
         for (User user : enforcers.getUsers()) {
-            user.getObjectiveCompus().setCompus(user);
+            user.getObjectiveCompass().setCompass(user);
         }
         for (User user : criminals.getUsers()) {
-            user.getObjectiveCompus().setCompus(user);
+            user.getObjectiveCompass().setCompass(user);
         }
         if (System.currentTimeMillis() >= missionTime) {
             missionTime = -1;

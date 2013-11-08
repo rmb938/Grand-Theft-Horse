@@ -29,6 +29,10 @@ public class GrandTheftHorse extends JavaPlugin {
 
     }
 
+    /**
+     * Gets the GTH database
+     * @return Database
+     */
     public Database getDb() {
         return database;
     }
