@@ -1,5 +1,6 @@
 package com.mcprohosting.plugins.gth.mission.team;
 
+import com.mcprohosting.plugins.gth.faction.Faction;
 import com.mcprohosting.plugins.gth.user.User;
 import org.bukkit.Location;
 
@@ -16,6 +17,19 @@ public class MTeam {
 
     private ArrayList<Location> spawns = new ArrayList<>();
     private ArrayList<User> users = new ArrayList<>();
+    private final Faction facion;
+
+    public MTeam(Faction faction) {
+        this.facion = faction;
+    }
+
+    public Faction getFacion() {
+        return facion;
+    }
+
+    public ArrayList<User> getUsers() {
+        return users;
+    }
 
     public Location getSafestSpawn() {
         return null;

@@ -1,6 +1,7 @@
 package com.mcprohosting.plugins.gth.mission.objective;
 
 import com.mcprohosting.plugins.gth.GrandTheftHorse;
+import com.mcprohosting.plugins.gth.events.MissionTimeUp;
 import com.mcprohosting.plugins.gth.mission.Mission;
 import com.mcprohosting.plugins.gth.user.User;
 import org.bukkit.Bukkit;
@@ -23,19 +24,38 @@ public class OneVIP extends Objective implements Listener {
 
     private int vipLives = 25;
     private final User vip;
-    private final Mission mission;
 
     public OneVIP(GrandTheftHorse plugin, Mission mission, User vip) {
-        super(plugin);
+        super(plugin, mission);
         this.vip = vip;
-        this.mission = mission;
         Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @Override
+    public String startObjectiveMessage() {
+        return "Some message describing the one vip objective.";
+    }
+
+    @Override
     public void generateScoreboardInfo(org.bukkit.scoreboard.Objective objective) {
-        Score score = objective.getScore(Bukkit.getOfflinePlayer("VIP Lives: "));
+        Score score = objective.getScore(Bukkit.getOfflinePlayer("VIP Target: "));
+        score.setScore(1);
+        score = objective.getScore(Bukkit.getOfflinePlayer(vip.getUserName()));
         score.setScore(vipLives);
+    }
+
+    @Override
+    public void setCompus(User user) {
+        Player player = Bukkit.getPlayer(user.getUserName());
+        Player vipPlayer = Bukkit.getPlayer(vip.getUserName());
+        player.setCompassTarget(vipPlayer.getLocation());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onMissionTimeUp(MissionTimeUp event) {
+        if (event.getMission() == getMission()) {
+            getMission().missionOver(getMission().getOtherTeam(vip.getMissionTeam()));
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -44,7 +64,7 @@ public class OneVIP extends Objective implements Listener {
         if (player.getName().equalsIgnoreCase(vip.getUserName())) {
             vipLives -= 1;
             if (vipLives == 0) {
-
+                getMission().missionOver(getMission().getOtherTeam(vip.getMissionTeam()));
             }
         }
     }
@@ -53,7 +73,7 @@ public class OneVIP extends Objective implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         if (player.getName().equalsIgnoreCase(vip.getUserName())) {
-
+            getMission().missionOver(getMission().getOtherTeam(vip.getMissionTeam()));
         }
     }
 

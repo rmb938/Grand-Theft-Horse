@@ -51,7 +51,9 @@ public final class Database {
     private void createTables() {
         //create user table
         //    create user inventory table
+        //    create user armour table
         //    create user horse info table
+        //        create horse armour table
         //        create horse inv table
 
         //create objective type table
@@ -84,6 +86,10 @@ public final class Database {
 
     public Mission generateMission() {
         return null;
+    }
+
+    public void removeMission(Mission mission) {
+        runningMissions.remove(mission);
     }
 
     public void updateQueryPS(Connection conn, String s, Object... params) {

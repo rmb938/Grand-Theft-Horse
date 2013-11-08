@@ -1,6 +1,7 @@
 package com.mcprohosting.plugins.gth.user;
 
 import com.mcprohosting.plugins.gth.faction.Faction;
+import com.mcprohosting.plugins.gth.mission.objective.Objective;
 import com.mcprohosting.plugins.gth.mission.team.MTeam;
 import org.bukkit.Location;
 
@@ -17,9 +18,22 @@ public class User {
     private Faction faction;
     private MTeam missionTeam;
     private Location chosenSpawn;
+    private Objective objectiveCompus;
+
+    public Objective getObjectiveCompus() {
+        return objectiveCompus;
+    }
+
+    public void setObjectiveCompus(Objective objectiveCompus) {
+        this.objectiveCompus = objectiveCompus;
+    }
 
     public Location getChosenSpawn() {
         return chosenSpawn;
+    }
+
+    public void setChosenSpawn(Location chosenSpawn) {
+        this.chosenSpawn = chosenSpawn;
     }
 
     public Faction getFaction() {
