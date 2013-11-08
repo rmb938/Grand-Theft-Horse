@@ -51,6 +51,10 @@ public class OneVIP extends Objective implements Listener {
         player.setCompassTarget(vipPlayer.getLocation());
     }
 
+    public void objectiveTick() {
+        //not needed for this mission
+    }
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onMissionTimeUp(MissionTimeUp event) {
         if (event.getMission() == getMission()) {

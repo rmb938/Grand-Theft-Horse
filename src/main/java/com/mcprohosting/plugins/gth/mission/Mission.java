@@ -163,6 +163,9 @@ public class Mission extends BukkitRunnable {
 
     @Override
     public void run() {
+        for (Objective objective : objectives) {
+            objective.objectiveTick();
+        }
         if (missionTime != -1) {
             return;
         }

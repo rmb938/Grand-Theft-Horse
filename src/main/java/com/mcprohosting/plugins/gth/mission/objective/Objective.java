@@ -31,4 +31,6 @@ public abstract class Objective {
 
     public abstract void setCompus(User user);
 
+    public abstract void objectiveTick();
+
 }

@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -36,12 +37,23 @@ public class GTHPlayerListener implements Listener {
             //make user pick faction(lock user inside spawn area until picked)
             //ect..
         } else {
-
+            //spawn user at chosen npc spawn
+            //set compus to chosen npc spawn
+            //populate inv, armour
         }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        event.setKeepLevel(true);
+        //event.getEntity().getWorld().setGameRuleValue("keepInventory", "true"); -- initialize this some where
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        User user = plugin.getDb().getUser(player.getName());
+        user.getMissionTeam().getUsers().remove(user);
         plugin.getDb().saveUser(event.getPlayer().getName(), true);
     }
 
