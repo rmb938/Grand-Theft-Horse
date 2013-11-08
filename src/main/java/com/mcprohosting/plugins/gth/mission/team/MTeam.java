@@ -17,4 +17,8 @@ public class MTeam {
     private ArrayList<Location> spawns = new ArrayList<>();
     private ArrayList<User> users = new ArrayList<>();
 
+    public Location getSafestSpawn() {
+        return null;
+    }
+
 }

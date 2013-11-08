@@ -1,6 +1,7 @@
 package com.mcprohosting.plugins.gth.database;
 
 import com.mcprohosting.plugins.gth.GrandTheftHorse;
+import com.mcprohosting.plugins.gth.mission.Mission;
 import com.mcprohosting.plugins.gth.user.User;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
@@ -8,6 +9,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -26,6 +28,7 @@ public final class Database {
     private final String databaseUserName;
     private final String databasePassword;
     private final HashMap<String, User> users;
+    private final ArrayList<Mission> runningMissions;
 
     public Database(GrandTheftHorse plugin) {
         DbUtils.loadDriver("com.mysql.jdbc.Driver");
@@ -36,7 +39,8 @@ public final class Database {
         this.tablePrefix = plugin.getConfig().getString("mysql.table_prefix");
         this.databaseUserName = plugin.getConfig().getString("mysql.username");
         this.databasePassword = plugin.getConfig().getString("mysql.password");
-        users = new HashMap<>();
+        this.users = new HashMap<>();
+        this.runningMissions = new ArrayList<>();
     }
 
     public Connection getConnection() throws SQLException {
@@ -50,9 +54,9 @@ public final class Database {
         //    create user horse info table
         //        create horse inv table
 
-        //create mission table
-        //    create mission objective table(cuboid) - if needed
-        //    create mission spawn points table
+        //create objective type table
+        //    create objectives table
+        //    create objective scoreboard info table
 
     }
 
@@ -76,6 +80,10 @@ public final class Database {
         if (remove == true) {
             users.remove(name);
         }
+    }
+
+    public Mission generateMission() {
+        return null;
     }
 
     public void updateQueryPS(Connection conn, String s, Object... params) {
