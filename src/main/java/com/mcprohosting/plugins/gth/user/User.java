@@ -1,5 +1,7 @@
 package com.mcprohosting.plugins.gth.user;
 
+import com.mcprohosting.plugins.gth.faction.Faction;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Ryan
@@ -10,5 +12,6 @@ package com.mcprohosting.plugins.gth.user;
 public class User {
 
     private String userName;
+    private Faction faction;
 
 }

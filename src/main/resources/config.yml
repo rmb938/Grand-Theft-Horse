@@ -1,0 +1,6 @@
+mysql:
+  address: 127.0.0.1
+  database: GTH
+  table_prefix: gth_
+  username: minecraft
+  password: minecraft

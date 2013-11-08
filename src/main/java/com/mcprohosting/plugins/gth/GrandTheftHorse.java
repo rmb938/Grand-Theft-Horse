@@ -1,5 +1,8 @@
 package com.mcprohosting.plugins.gth;
 
+import com.mcprohosting.plugins.gth.database.Database;
+import com.mcprohosting.plugins.gth.defaultlisteners.GTHBlockListener;
+import com.mcprohosting.plugins.gth.defaultlisteners.GTHPlayerListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -11,14 +14,22 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class GrandTheftHorse extends JavaPlugin {
 
-
+    private GTHBlockListener blockListener;
+    private GTHPlayerListener playerListener;
+    private Database database;
 
     public void onEnable() {
-
+        this.saveDefaultConfig();
+        this.blockListener = new GTHBlockListener(this);
+        this.playerListener = new GTHPlayerListener(this);
+        this.database = new Database(this);
     }
 
     public void onDisable() {
 
     }
 
+    public Database getDb() {
+        return database;
+    }
 }
